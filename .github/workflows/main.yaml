@@ -1,0 +1,19 @@
+name: Production workflow - Lambda Function - Prod
+on:
+  push:
+    branches: [main]
+
+jobs:
+  Deploy-lambda:
+    uses: PePires58/ReusableWorkflows/.github/workflows/005_typescript_deploy_pipeline.yaml@main
+    with: 
+      stack-name: "prod-escoladesoftware-usuarios-lambdaconsultausuario-fn"
+      parameters-file-path: "infra/prod.parameters.txt"
+      build-js-directory: "node_modules"
+      execute-unit-tests: "false"
+    secrets:
+      AWS_BUCKET_DEPLOY: ${{ secrets.AWS_BUCKET_DEPLOY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      

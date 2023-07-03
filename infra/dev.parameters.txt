@@ -1,0 +1,3 @@
+Environment="dev",
+UsuariosTableName="tbes_usuarios_dev",
+TokenSecretParameterName="/escoladesoftware/dev/tokenkey"
