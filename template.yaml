@@ -31,7 +31,6 @@ Resources:
       Environment:
         Variables:
           UsuariosTableName: !Ref UsuariosTableName
-          TokenTableName: !Ref TokenTableName
           TokenSecretParameterName: !Ref TokenSecretParameterName
     Tags: 
       - Key: Ambiente
