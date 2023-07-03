@@ -9,6 +9,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda/trigger/
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let erros: Erro[] = [];
 
+    console.log(event);
     const token = event.requestContext.authorizer?.context.token || '';
     console.log(token);
 
