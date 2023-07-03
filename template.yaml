@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Escola de software - Usuarios - Lambda para consulta um usuário
+
+Parameters:
+  Environment:
+    Description: Environment
+    Type: String
+  UsuariosTableName:
+    Description: Usuarios Table Name
+    Type: String
+  TokenSecretParameterName:
+    Description: Token secret parameter name
+    Type: String
+
+Resources:
+  UsuariosLambdaRealizarLoginFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Register a token and returns it
+      FunctionName: !Join ["_", [!Ref Environment, "escoladesoftware-usuarios-lambdaconsultausuariofn"]]      
+      Handler: app.lambdaHandler
+      CodeUri: src/
+      Runtime: nodejs18.x
+      Timeout: 3
+      Architectures:
+        - x86_64
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonSSMReadOnlyAccess
+      Environment:
+        Variables:
+          UsuariosTableName: !Ref UsuariosTableName
+          TokenTableName: !Ref TokenTableName
+          TokenSecretParameterName: !Ref TokenSecretParameterName
+    Tags: 
+      - Key: Ambiente
+        Value: !Ref Environment
+      - Key: Microservico
+        Value: Usuarios
+      - Key: Servico
+        Value: Lambda
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: 
+        - app.ts
+
+  UsuariosLambdaRealizarLoginLogGroup: 
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: !Join ["", ["/aws/lambda/", !Ref Environment, "_escoladesoftware-usuarios-lambdaconsultausuariofn"]]
+      RetentionInDays: 3
+      Tags: 
+        - Key: Ambiente
+          Value: !Ref Environment
+        - Key: Microservico
+          Value: Usuarios
+        - Key: Servico
+          Value: LogGroup
