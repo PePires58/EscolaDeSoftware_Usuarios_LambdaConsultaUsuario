@@ -10,7 +10,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     let erros: Erro[] = [];
 
     console.log(event);
-    const token = event.requestContext.authorizer?.context.token || '';
+    const token = event.requestContext.authorizer?.token || '';
     console.log(token);
 
     const secret = await new BuscaSegredoParameterStore()
