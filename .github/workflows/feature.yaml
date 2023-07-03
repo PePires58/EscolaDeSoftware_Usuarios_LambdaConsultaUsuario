@@ -1,0 +1,27 @@
+name: Feature workflow - Lambda Function
+on:
+  push:
+    branches: [feature**]
+
+jobs:
+
+  Build-lambda:
+    uses: PePires58/ReusableWorkflows/.github/workflows/005_typescript_build.yaml@main
+    with: 
+      build-js-directory: "node_modules"
+      execute-unit-tests: "false"
+
+  Pull-request:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    needs: [Build-lambda]
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Create pull request
+        run: |
+          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          gh pr create -B development -H $CURRENT_BRANCH  --title 'Feature to development' --body 'Pull request to go to development' || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

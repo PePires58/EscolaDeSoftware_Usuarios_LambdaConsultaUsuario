@@ -1,0 +1,3 @@
+Environment="prod",
+UsuariosTableName="tbes_usuarios",
+TokenSecretParameterName="/escoladesoftware/prod/tokenkey"
