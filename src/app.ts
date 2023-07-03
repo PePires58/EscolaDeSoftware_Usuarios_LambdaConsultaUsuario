@@ -5,6 +5,7 @@ import { Erro } from './models/erro';
 import { ValidaToken, BuscaSegredoParameterStore } from 'escoladesoftware-autorizador-package-ts/lib';
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda/trigger/api-gateway-proxy';
+import { Usuario } from 'escoladesoftware-autorizador-package-ts/lib/models/usuario';
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let erros: Erro[] = [];
@@ -17,11 +18,12 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         .BuscarSegredo(process.env.TokenSecretParameterName || '',
             false);
 
+    let objetoToken: Usuario;
     try {
-        ValidaToken.ValidarToken(token, secret, {
+        objetoToken = new ValidaToken().ValidarToken(token, secret, {
             issuer: 'escoladesoftware',
             audience: 'escoladesoftware',
-        });
+        }) as Usuario;
     }
     catch (e) {
         console.log(e);
@@ -32,7 +34,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
 
     try {
         const dynamoDb = new DynamoDbService();
-        const usuario = dynamoDb.ConsultaUsuario(token);
+        const usuario = await dynamoDb.ConsultaUsuario(objetoToken.email);
 
         return defaultResult(200, usuario);
     } catch (error) {
