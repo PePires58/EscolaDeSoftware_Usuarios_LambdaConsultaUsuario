@@ -9,7 +9,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda/trigger/
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     let erros: Erro[] = [];
 
-    const token = event.headers.Authorization || '';
+    const token = event.requestContext.authorizer?.context.token || '';
     console.log(token);
 
     const secret = await new BuscaSegredoParameterStore()
