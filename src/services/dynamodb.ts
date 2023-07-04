@@ -25,7 +25,8 @@ export class DynamoDbService {
             AttributesToGet: [
                 'email',
                 'nome',
-                'sobrenome'
+                'sobrenome',
+                'cpf'
             ]
         };
 
@@ -42,7 +43,7 @@ export class DynamoDbService {
                 email: usuarioItem.email.S || '',
                 nome: usuarioItem.nome.S || '',
                 sobrenome: usuarioItem.sobrenome.S || '',
-                cpf: ''
+                cpf: usuarioItem.cpf.S || ''
             };
 
             return usuario;
